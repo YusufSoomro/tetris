@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tetris</title>
+  </head>
+  <body>
+    <figure class="tetris-game"></canvas>
+
+    <script src="../js/jquery-1.11.2.js"></script>
+  </body>
+
+  <script charset="utf-8">
+    $(function() {
+      new TG.View($('.tetris-game'))
+    })
+  </script>
+</html>
