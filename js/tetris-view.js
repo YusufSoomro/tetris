@@ -6,13 +6,13 @@
   var View = TG.View = function ($el) {
     this.$el = $el;
 
-    // this.board = new TG.Board(20);
+    this.board = new TG.Board(30, 20);
     this.setupGrid();
 
-    // this.intervalId = window.setInterval(
-    //   this.step.bind(this),
-    //   View.STEP_MILLIS
-    // );
+    this.intervalId = window.setInterval(
+      this.step.bind(this),
+      View.STEP_MILLIS
+    );
 
     $(window).on("keydown", this.handleKeyEvent.bind(this));
   };
@@ -33,44 +33,45 @@
   };
 
   View.prototype.render = function () {
-    // simple text based rendering
-    // this.$el.html(this.board.render());
 
-    // this.updateClasses(this.board.snake.segments, "snake");
-    // this.updateClasses([this.board.apple.position], "apple");
+    _.each(this.board.gridHash, function(blockArr) {
+      this.updateClasses(blockArr, "block-heap")
+    }, this)
+
+    this.updateClasses(this.board.fallingPiece.segments, "block");
   };
 
   View.prototype.updateClasses = function(coords, className) {
-    // this.$li.filter("." + className).removeClass();
-    //
-    // coords.forEach(function(coord){
-    //   var flatCoord = (coord.i * this.board.dim) + coord.j;
-    //   this.$li.eq(flatCoord).addClass(className);
-    // }.bind(this));
+    if (className === "block") {
+      this.$li.filter("." + className).css("background-color", "#404040 ");
+      this.$li.filter("." + className).removeClass();
+    }
+
+    coords.forEach(function(block){
+      var flatCoord = (block.rowPos * this.board.numCols) + block.colPos;
+      this.$li.eq(flatCoord).addClass(className);
+      this.$li.eq(flatCoord).css("background-color", block.color)
+    }.bind(this));
   };
 
   View.prototype.setupGrid = function () {
-    // var html = "";
-    //
-    // for (var i = 0; i < this.board.dim; i++) {
-    //   html += "<ul>";
-    //   for (var j = 0; j < this.board.dim; j++) {
-    //     html += "<li></li>";
-    //   }
-    //   html += "</ul>";
-    // }
-    //
-    // this.$el.html(html);
-    // this.$li = this.$el.find("li");
+    var html = "";
+
+    for (var i = 0; i < this.board.numRows; i++) {
+      html += "<ul>";
+      for (var j = 0; j < this.board.numCols; j++) {
+        html += "<li></li>";
+      }
+      html += "</ul>";
+    }
+
+    this.$el.html(html);
+    this.$li = this.$el.find("li");
   };
 
   View.prototype.step = function () {
-    // if (this.board.snake.segments.length > 0) {
-    //   this.board.snake.move();
-    //   this.render();
-    // } else {
-    //   alert("You lose!");
-    //   window.clearInterval(this.intervalId);
-    // }
+    console.log("stepping");
+    this.board.move();
+    this.render();
   };
 })();

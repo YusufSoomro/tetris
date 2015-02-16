@@ -12,7 +12,7 @@
   Block.SYMBOL = "B";
 
   Block.prototype.equals = function (block2) {
-    return (this.rowPos == block2.rowPos) && (this.colPos == block2.colPos);
+    return (this.rowPos === block2.rowPos) && (this.colPos === block2.colPos);
   };
 
   Block.prototype.isOpposite = function (block2) {
@@ -148,4 +148,12 @@
 
     return plugShape;
   };
+
+  FallingPiece.prototype.move = function() {
+    _.each(this.segments, function(block) {
+      block.rowPos += 1
+    }, this)
+
+    return this;
+  }
 })();
