@@ -9,6 +9,8 @@
     this.color = color;
   };
 
+  Block.SYMBOL = "B";
+
   Block.prototype.equals = function (block2) {
     return (this.rowPos == block2.rowPos) && (this.colPos == block2.colPos);
   };
