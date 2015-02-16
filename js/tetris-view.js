@@ -28,7 +28,11 @@
 
   View.prototype.handleKeyEvent = function (event) {
     if (View.KEYS[event.keyCode]) {
-      // this.board.snake.turn(View.KEYS[event.keyCode]);
+      if (event.keyCode === 37) {
+        this.board.fallingPiece.moveLeft();
+      } else if (event.keyCode === 39) {
+        this.board.fallingPiece.moveRight();
+      }
     }
   };
 
