@@ -24,8 +24,9 @@
   };
 
   FallingPiece = TG.FallingPiece = function(board) {
+    this.board = board;
     this.segments = [];
-    this.centerCol = 20 / 2;
+    this.centerCol = this.board.numCols / 2;
   };
 
   FallingPiece.SHAPES = [
@@ -46,7 +47,7 @@
     "purple"
   ];
 
-  FallingPiece.randomPiece = function() {
+  FallingPiece.randomPiece = function(board) {
     var randomColor = FallingPiece.COLORS[
       Math.floor(Math.random()*FallingPiece.COLORS.length)
     ]
@@ -56,24 +57,24 @@
     ]
 
     if (randomPieceShape === "lShapeRight") {
-      return FallingPiece.lShapeRight(randomColor);
+      return FallingPiece.lShapeRight(randomColor, board);
     } else if (randomPieceShape === "lShapeLeft") {
-      return FallingPiece.lShapeLeft(randomColor);
+      return FallingPiece.lShapeLeft(randomColor, board);
     } else if (randomPieceShape === "blockShape") {
-      return FallingPiece.blockShape(randomColor);
+      return FallingPiece.blockShape(randomColor, board);
     } else if (randomPieceShape === "stickShape") {
-      return FallingPiece.stickShape(randomColor);
+      return FallingPiece.stickShape(randomColor, board);
     } else if (randomPieceShape === "zShapeRight") {
-      return FallingPiece.zShapeRight(randomColor);
+      return FallingPiece.zShapeRight(randomColor, board);
     } else if (randomPieceShape === "zShapeLeft") {
-      return FallingPiece.zShapeLeft(randomColor);
+      return FallingPiece.zShapeLeft(randomColor, board);
     } else if (randomPieceShape === "plugShape") {
-      return FallingPiece.plugShape(randomColor);
+      return FallingPiece.plugShape(randomColor, board);
     }
   };
 
-  FallingPiece.lShapeRight = function(color) {
-    var lShapeRight = new FallingPiece;
+  FallingPiece.lShapeRight = function(color, board) {
+    var lShapeRight = new FallingPiece(board);
 
     lShapeRight.segments.push(new Block(0, lShapeRight.centerCol, color));
     lShapeRight.segments.push(new Block(0 + 1, lShapeRight.centerCol, color));
@@ -83,8 +84,8 @@
     return lShapeRight;
   };
 
-  FallingPiece.lShapeLeft = function(color) {
-    var lShapeLeft = new FallingPiece;
+  FallingPiece.lShapeLeft = function(color, board) {
+    var lShapeLeft = new FallingPiece(board);
 
     lShapeLeft.segments.push(new Block(0, lShapeLeft.centerCol, color));
     lShapeLeft.segments.push(new Block(0 + 1, lShapeLeft.centerCol, color));
@@ -94,8 +95,8 @@
     return lShapeLeft;
   };
 
-  FallingPiece.blockShape = function(color) {
-    var blockShape = new FallingPiece;
+  FallingPiece.blockShape = function(color, board) {
+    var blockShape = new FallingPiece(board);
 
     blockShape.segments.push(new Block(0, blockShape.centerCol, color));
     blockShape.segments.push(new Block(0 + 1, blockShape.centerCol, color));
@@ -105,8 +106,8 @@
     return blockShape;
   };
 
-  FallingPiece.stickShape = function(color) {
-    var stickShape = new FallingPiece;
+  FallingPiece.stickShape = function(color, board) {
+    var stickShape = new FallingPiece(board);
 
     stickShape.segments.push(new Block(0, stickShape.centerCol, color));
     stickShape.segments.push(new Block(0 + 1, stickShape.centerCol, color));
@@ -116,8 +117,8 @@
     return stickShape;
   };
 
-  FallingPiece.zShapeRight = function(color) {
-    var zShapeRight = new FallingPiece;
+  FallingPiece.zShapeRight = function(color, board) {
+    var zShapeRight = new FallingPiece(board);
 
     zShapeRight.segments.push(new Block(0, zShapeRight.centerCol, color));
     zShapeRight.segments.push(new Block(0, zShapeRight.centerCol + 1, color));
@@ -127,8 +128,8 @@
     return zShapeRight;
   };
 
-  FallingPiece.zShapeLeft = function(color) {
-    var zShapeLeft = new FallingPiece;
+  FallingPiece.zShapeLeft = function(color, board) {
+    var zShapeLeft = new FallingPiece(board);
 
     zShapeLeft.segments.push(new Block(0, zShapeLeft.centerCol, color));
     zShapeLeft.segments.push(new Block(0, zShapeLeft.centerCol - 1, color));
@@ -138,8 +139,8 @@
     return zShapeLeft;
   };
 
-  FallingPiece.plugShape = function(color) {
-    var plugShape = new FallingPiece;
+  FallingPiece.plugShape = function(color, board) {
+    var plugShape = new FallingPiece(board);
 
     plugShape.segments.push(new Block(0, plugShape.centerCol, color));
     plugShape.segments.push(new Block(0 + 1, plugShape.centerCol, color));
@@ -153,7 +154,44 @@
     _.each(this.segments, function(block) {
       block.rowPos += 1
     }, this)
+  };
 
-    return this;
-  }
+  FallingPiece.prototype.moveLeft = function() {
+    this.segments.sort(function compareNumbers(b1, b2) { return b1.colPos - b2.colPos; })
+
+    if (_.every(this.segments, function(block) {
+      return this.validPosition(block.rowPos, block.colPos - 1)
+    }, this))
+    {
+      for (var i = 0; i < this.segments.length; i++) {
+        this.segments[i].colPos -= 1
+      }
+    }
+  };
+
+  FallingPiece.prototype.moveRight = function() {
+    this.segments.sort(function compareNumbers(b1, b2) { return b2.colPos - b1.colPos; })
+
+    if (_.every(this.segments, function(block) {
+      return this.validPosition(block.rowPos, block.colPos + 1)
+      // debugger;
+    }, this))
+    {
+      for (var i = 0; i < this.segments.length; i++) {
+        this.segments[i].colPos += 1
+      }
+    }
+  };
+
+  FallingPiece.prototype.validPosition = function(rowPos, colPos) {
+    return (rowPos >= 0 && rowPos < this.board.numRows) &&
+      (colPos >= 0 && colPos < this.board.numCols) &&
+      (_.filter(this.board.gridHash[rowPos], function(block) {
+        if (block) {
+          return block.rowPos === rowPos && block.colPos === colPos;
+        } else {
+          return false;
+        }
+      }).length === 0);
+  };
 })();

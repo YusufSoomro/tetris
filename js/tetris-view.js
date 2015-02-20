@@ -6,7 +6,7 @@
   var View = TG.View = function ($el) {
     this.$el = $el;
 
-    this.board = new TG.Board(30, 20);
+    this.board = new TG.Board(32, 10);
     this.setupGrid();
 
     this.intervalId = window.setInterval(
@@ -70,12 +70,26 @@
     }
 
     this.$el.html(html);
+    $('ul').slice(0, 4).css("display", "none");
     this.$li = this.$el.find("li");
   };
 
   View.prototype.step = function () {
-    console.log("stepping");
     this.board.move();
     this.render();
+    this.isOver();
+  };
+
+  View.prototype.isOver = function() {
+    var $topLiRow = $('ul').eq(4).find('li');
+
+    _.each($topLiRow, function(li) {
+      var $li = $(li);
+
+      if ($li.attr("class") === "block-heap") {
+        alert("You lose!");
+        window.clearInterval(this.intervalId);
+      }
+    }, this)
   };
 })();

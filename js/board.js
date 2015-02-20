@@ -6,7 +6,7 @@
   var Board = TG.Board = function(numRows, numCols) {
     this.numRows = numRows;
     this.numCols = numCols;
-    this.fallingPiece = TG.FallingPiece.randomPiece();
+    this.fallingPiece = TG.FallingPiece.randomPiece(this);
 
     this.gridHash = Board.setupGridHash(this.numRows);
   };
@@ -62,7 +62,7 @@
   Board.prototype.move = function() {
     if (this.isBottom()) {
       this.addBlocks(this.fallingPiece)
-      this.fallingPiece = TG.FallingPiece.randomPiece();
+      this.fallingPiece = TG.FallingPiece.randomPiece(this);
     } else {
       this.fallingPiece.move();
     }
