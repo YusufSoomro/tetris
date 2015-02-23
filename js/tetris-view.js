@@ -32,6 +32,8 @@
         this.board.fallingPiece.moveLeft();
       } else if (event.keyCode === 39) {
         this.board.fallingPiece.moveRight();
+      } else if (event.keyCode === 38) {
+        this.board.fallingPiece.rotate();
       }
     }
   };
