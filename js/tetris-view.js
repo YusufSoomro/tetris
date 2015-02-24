@@ -49,7 +49,7 @@
 
   View.prototype.updateClasses = function(coords, className) {
     if (className === "block") {
-      this.$li.filter("." + className).css("background-color", "#404040 ");
+      this.$li.filter("." + className).css("background-color", "#404040");
       this.$li.filter("." + className).removeClass();
     }
 
@@ -57,6 +57,14 @@
       var flatCoord = (block.rowPos * this.board.numCols) + block.colPos;
       this.$li.eq(flatCoord).addClass(className);
       this.$li.eq(flatCoord).css("background-color", block.color)
+    }.bind(this));
+  };
+
+  View.prototype.removeClasses = function(coords) {
+    coords.forEach(function(block){
+      var flatCoord = (block.rowPos * this.board.numCols) + block.colPos;
+      this.$li.eq(flatCoord).removeClass();
+      this.$li.eq(flatCoord).css("background-color", "#404040")
     }.bind(this));
   };
 
@@ -77,7 +85,7 @@
   };
 
   View.prototype.step = function () {
-    this.board.move();
+    this.board.move(this);
     this.render();
     this.isOver();
   };

@@ -47,17 +47,17 @@
     }, this)
   };
 
-  Board.prototype.addBlocks = function(fallingPiece) {
+  Board.prototype.addBlocks = function(fallingPiece, view) {
     _.each(fallingPiece.segments, function(block) {
       this.gridHash[block.rowPos][block.colPos] = block
     }, this)
 
-    this.deleteRow();
+    this.deleteRow(view);
   };
 
-  Board.prototype.move = function() {
+  Board.prototype.move = function(view) {
     if (this.isBottom()) {
-      this.addBlocks(this.fallingPiece)
+      this.addBlocks(this.fallingPiece, view)
       this.fallingPiece = TG.FallingPiece.randomPiece(this);
     } else {
       this.fallingPiece.move();
@@ -81,15 +81,14 @@
     return isBottom;
   };
 
-  Board.prototype.deleteRow = function() {
+  Board.prototype.deleteRow = function(view) {
     _.each(this.gridHash, function(blocksArr, rowPos) {
-      debugger
       var rowFull = true;
 
       if (blocksArr.length === this.numCols) {
         _.each(blocksArr, function(block) {
           if (!block) {
-            rowFull = false
+            rowFull = false;
           }
         })
       } else {
@@ -98,8 +97,26 @@
 
 
       if (rowFull) {
-        this.gridHash[rowPos] = [];
+        this.moveRowsDown(rowPos, view);
       }
     }, this)
-  }
+  };
+
+  Board.prototype.moveRowsDown = function(rowPos, view) {
+    _.each(this.gridHash, function(blockArr) {
+      view.removeClasses(blockArr)
+    }, this)
+
+    for (var i = rowPos; i > -1; i--) {
+      view.removeClasses(this.gridHash[rowPos]);
+      this.gridHash[i] = this.gridHash[i - 1];
+      _.each(this.gridHash[i], function(block) {
+        if (block) {
+          block.rowPos += 1
+        }
+      }, this)
+    }
+
+    this.gridHash[0] = []
+  };
 })();
