@@ -37,12 +37,6 @@
     return grid;
   };
 
-  // TODO: add the segments of a falling piece to the board
-
-  // Board.prototype.addBlocks = function(fallingPieceObj) {
-  //
-  // }
-
   Board.prototype.render = function() {
     var grid = Board.blankGrid(this.numRows, this.numCols);
 
@@ -57,6 +51,8 @@
     _.each(fallingPiece.segments, function(block) {
       this.gridHash[block.rowPos][block.colPos] = block
     }, this)
+
+    this.deleteRow();
   };
 
   Board.prototype.move = function() {
@@ -84,4 +80,26 @@
 
     return isBottom;
   };
+
+  Board.prototype.deleteRow = function() {
+    _.each(this.gridHash, function(blocksArr, rowPos) {
+      debugger
+      var rowFull = true;
+
+      if (blocksArr.length === this.numCols) {
+        _.each(blocksArr, function(block) {
+          if (!block) {
+            rowFull = false
+          }
+        })
+      } else {
+        return;
+      }
+
+
+      if (rowFull) {
+        this.gridHash[rowPos] = [];
+      }
+    }, this)
+  }
 })();
