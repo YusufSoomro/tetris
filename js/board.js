@@ -98,6 +98,7 @@
 
       if (rowFull) {
         this.moveRowsDown(rowPos, view);
+        view.scoreUp();
       }
     }, this)
   };

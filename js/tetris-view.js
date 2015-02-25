@@ -97,9 +97,17 @@
       var $li = $(li);
 
       if ($li.attr("class") === "block-heap") {
-        alert("You lose!");
+        if (!this.alerted) { alert("You lose!"); this.alerted = true; }
         window.clearInterval(this.intervalId);
       }
     }, this)
   };
+
+  View.prototype.scoreUp = function() {
+    var $score = $('#score-num');
+    var $lines = $('#lines-num');
+
+    $score.text(parseInt($score.text()) + 50);
+    $lines.text(parseInt($lines.text()) + 1);
+  }
 })();

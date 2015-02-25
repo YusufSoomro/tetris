@@ -5,7 +5,15 @@
     <link rel="stylesheet" type="text/css" href="../css/tetris.css">
   </head>
   <body>
-    <figure class="tetris-game"></canvas>
+    <div id="scoreboard">
+      <div id="score">
+        <span class="board-left">SCORE</span><span class="board-right" id="score-num">0</span>
+      </div><br>
+      <div id="lines">
+        <span class="board-left">LINES</span><span class="board-right" id="lines-num">0</span>
+      </div>
+    </div>
+    <figure class="tetris-game"></figure>
 
     <script src="../js/jquery-1.11.2.js"></script>
     <script src="../js/underscore.js"></script>
