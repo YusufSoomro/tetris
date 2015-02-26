@@ -179,13 +179,24 @@
     return plugShape;
   };
 
-  FallingPiece.prototype.move = function() {
-    _.each(this.segments, function(block) {
-      block.rowPos += 1
-    }, this)
+  FallingPiece.prototype.move = function(view, board) {
+
+    if (view) {
+      if (!board.isBottom()) {
+        _.each(this.segments, function(block) {
+          block.rowPos += 1
+        }, this)
+        view.render();
+      }
+    } else {
+      _.each(this.segments, function(block) {
+        block.rowPos += 1
+      }, this)
+    }
+
   };
 
-  FallingPiece.prototype.moveLeft = function() {
+  FallingPiece.prototype.moveLeft = function(view) {
     if (_.every(this.segments, function(block) {
       return this.validPosition(block.rowPos, block.colPos - 1)
     }, this))
@@ -193,10 +204,11 @@
       for (var i = 0; i < this.segments.length; i++) {
         this.segments[i].colPos -= 1
       }
+      view.render();
     }
   };
 
-  FallingPiece.prototype.moveRight = function() {
+  FallingPiece.prototype.moveRight = function(view) {
     if (_.every(this.segments, function(block) {
       return this.validPosition(block.rowPos, block.colPos + 1)
     }, this))
@@ -204,10 +216,11 @@
       for (var i = 0; i < this.segments.length; i++) {
         this.segments[i].colPos += 1
       }
+      view.render();
     }
   };
 
-  FallingPiece.prototype.rotate = function() {
+  FallingPiece.prototype.rotate = function(view) {
     if (!this.positions) {
       return;
     }
@@ -225,6 +238,7 @@
         this.segments[i].rowPos += posToAdd[0];
         this.segments[i].colPos += posToAdd[1];
       }
+      view.render();
     }
   }
 

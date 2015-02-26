@@ -9,31 +9,31 @@
     this.board = new TG.Board(32, 10);
     this.setupGrid();
 
-    this.intervalId = window.setInterval(
-      this.step.bind(this),
-      View.STEP_MILLIS
-    );
-
     $(window).on("keydown", this.handleKeyEvent.bind(this));
   };
 
   View.KEYS = {
+    32: "dropPiece",
     38: "rotate",
     39: "moveRight",
     40: "speedUp",
     37: "moveLeft"
   };
 
-  View.STEP_MILLIS = 100;
+  View.STEP_MILLIS = 200;
 
   View.prototype.handleKeyEvent = function (event) {
     if (View.KEYS[event.keyCode]) {
       if (event.keyCode === 37) {
-        this.board.fallingPiece.moveLeft();
+        this.board.fallingPiece.moveLeft(this);
       } else if (event.keyCode === 39) {
-        this.board.fallingPiece.moveRight();
+        this.board.fallingPiece.moveRight(this);
       } else if (event.keyCode === 38) {
-        this.board.fallingPiece.rotate();
+        this.board.fallingPiece.rotate(this);
+      } else if (event.keyCode === 32) {
+        this.board.dropPiece(this);
+      } else if (event.keyCode === 40) {
+        this.board.fallingPiece.move(this, this.board)
       }
     }
   };
@@ -109,5 +109,19 @@
 
     $score.text(parseInt($score.text()) + 50);
     $lines.text(parseInt($lines.text()) + 1);
+  };
+
+  View.prototype.startGame = function() {
+    if (!this.gameStarted) {
+      this.intervalId = window.setInterval(
+        this.step.bind(this),
+        View.STEP_MILLIS
+      );
+      this.gameStarted = true;
+    }
+  };
+
+  View.prototype.pieceShadow = function() {
+    
   }
 })();

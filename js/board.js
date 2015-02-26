@@ -120,4 +120,11 @@
 
     this.gridHash[0] = []
   };
+
+  Board.prototype.dropPiece = function(view) {
+    while (!this.isBottom()) {
+      this.fallingPiece.move()
+    }
+    view.render();
+  };
 })();

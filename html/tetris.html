@@ -3,8 +3,26 @@
   <head>
     <title>Tetris</title>
     <link rel="stylesheet" type="text/css" href="../css/tetris.css">
+    <script src="../js/jquery-1.11.2.js"></script>
+    <script src="../js/underscore.js"></script>
+    <script src="../js/tetrisShapes.js"></script>
+    <script src="../js/board.js"></script>
+    <script src="../js/tetris-view.js"></script>
   </head>
   <body>
+    <div id="control-box">
+      <span class="control-header"><h1>Controls</h1></span><br>
+      <span class="controls">
+        Up Arrow: Rotate <br>
+        Left Arrow: Move Left <br>
+        Right Arrow: Move Right <br>
+        Space Bar: Drop Piece
+      </span>
+    </div>
+    <div id="button-box">
+      <button id="play" class="btn">Play</button>
+      <button id="restart" class="btn">Restart</button>
+    </div>
     <div id="scoreboard">
       <div id="score">
         <span class="board-left">SCORE</span><span class="board-right" id="score-num">0</span>
@@ -14,17 +32,24 @@
       </div>
     </div>
     <figure class="tetris-game"></figure>
-
-    <script src="../js/jquery-1.11.2.js"></script>
-    <script src="../js/underscore.js"></script>
-    <script src="../js/tetrisShapes.js"></script>
-    <script src="../js/board.js"></script>
-    <script src="../js/tetris-view.js"></script>
   </body>
 
   <script charset="utf-8">
-    $(function() {
-      new TG.View($('.tetris-game'))
+    var game = new TG.View($('.tetris-game'))
+
+    $('#play').on("click", function(event) {
+      event.preventDefault();
+      game.startGame();
+      $('#play').blur()
+      $('#control-box').css("display", "none")
+    })
+
+    $('#restart').on("click", function() {
+      game = new TG.View($('.tetris-game'))
+      game.startGame();
+      $('#restart').blur();
+      $('#score-num').text(0)
+      $('#lines-num').text(0)
     })
   </script>
 </html>
