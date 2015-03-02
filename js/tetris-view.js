@@ -40,6 +40,7 @@
 
   View.prototype.render = function () {
 
+    this.pieceShadow();
     _.each(this.board.gridHash, function(blockArr) {
       this.updateClasses(blockArr, "block-heap")
     }, this)
@@ -122,6 +123,44 @@
   };
 
   View.prototype.pieceShadow = function() {
-    
-  }
+    var fallingPiecePositions = _.map(this.board.fallingPiece.segments, function(block) {
+      return [block.rowPos, block.colPos];
+    })
+
+    while (!this.shadowIsBottom(fallingPiecePositions)) {
+      _.each(fallingPiecePositions, function(pos) {
+        pos[0] += 1
+      })
+    }
+
+    this.updateShadowClasses(fallingPiecePositions, "shadow");
+  };
+
+  View.prototype.shadowIsBottom = function(positions) {
+    var isBottom = false;
+
+    _.each(positions, function(pos) {
+      var nextRowPos = pos[0] + 1;
+      var nextColPos = pos[1];
+
+      if (nextRowPos === this.board.numRows ||
+        this.board.gridHash[nextRowPos][nextColPos]) {
+        isBottom = true;
+        return;
+      }
+    }, this)
+
+    return isBottom;
+  };
+
+  View.prototype.updateShadowClasses = function(coords, className) {
+    this.$li.filter("." + className).css("background-color", "#404040");
+    this.$li.filter("." + className).removeClass();
+
+    coords.forEach(function(pos){
+      var flatCoord = (pos[0] * this.board.numCols) + pos[1];
+      this.$li.eq(flatCoord).css("background-color", "#778899");
+      this.$li.eq(flatCoord).addClass("shadow");
+    }.bind(this));
+  };
 })();

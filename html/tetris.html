@@ -14,9 +14,10 @@
       <span class="control-header"><h1>Controls</h1></span><br>
       <span class="controls">
         Up Arrow: Rotate <br>
+        Space Bar: Drop Piece <br>
         Left Arrow: Move Left <br>
         Right Arrow: Move Right <br>
-        Space Bar: Drop Piece
+        Down Arrow: Move Down <br>
       </span>
     </div>
     <div id="button-box">
@@ -47,6 +48,7 @@
     $('#restart').on("click", function() {
       game = new TG.View($('.tetris-game'))
       game.startGame();
+      $('#control-box').css("display", "none")
       $('#restart').blur();
       $('#score-num').text(0)
       $('#lines-num').text(0)
