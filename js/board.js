@@ -11,8 +11,6 @@
     this.gridHash = Board.setupGridHash(this.numRows);
   };
 
-  Board.BLANK_SYMBOL = ".";
-
   Board.setupGridHash = function(numRows) {
     var gridHash = {}
 
@@ -21,30 +19,6 @@
     }
 
     return gridHash;
-  };
-
-  Board.blankGrid = function (numRows, numCols) {
-    var grid = [];
-
-    for (var i = 0; i < numRows; i++) {
-      var row = [];
-      for (var j = 0; j < numCols; j++) {
-        row.push(Board.BLANK_SYMBOL);
-      }
-      grid.push(row);
-    }
-
-    return grid;
-  };
-
-  Board.prototype.render = function() {
-    var grid = Board.blankGrid(this.numRows, this.numCols);
-
-    _.each(this.gridHash, function(blockArr, numRow) {
-      _.each(blockArr, function(block) {
-        this.grid[block.rowPos][block.colPos] = Block.SYMBOL
-      }, this)
-    }, this)
   };
 
   Board.prototype.addBlocks = function(fallingPiece, view) {

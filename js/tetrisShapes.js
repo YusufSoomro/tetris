@@ -9,56 +9,14 @@
     this.color = color;
   };
 
-  FallingPiece = TG.FallingPiece = function(board) {
+  var FallingPiece = TG.FallingPiece = function(board) {
     this.board = board;
     this.segments = [];
     this.centerCol = Math.floor(this.board.numCols / 2);
     this.orient = 0;
   };
 
-  FallingPiece.SHAPES = [
-    "lShapeRight",
-    "lShapeLeft",
-    "blockShape",
-    "stickShape",
-    "zShapeRight",
-    "zShapeLeft",
-    "plugShape"
-  ];
 
-  FallingPiece.COLORS = [
-    "red",
-    "blue",
-    "yellow",
-    "green",
-    "purple"
-  ];
-
-  FallingPiece.randomPiece = function(board) {
-    var randomColor = FallingPiece.COLORS[
-      Math.floor(Math.random() * FallingPiece.COLORS.length)
-    ]
-
-    var randomPieceShape = FallingPiece.SHAPES[
-      Math.floor(Math.random() * FallingPiece.SHAPES.length)
-    ]
-
-    if (randomPieceShape === "lShapeRight") {
-      return FallingPiece.lShapeRight(randomColor, board);
-    } else if (randomPieceShape === "lShapeLeft") {
-      return FallingPiece.lShapeLeft(randomColor, board);
-    } else if (randomPieceShape === "blockShape") {
-      return FallingPiece.blockShape(randomColor, board);
-    } else if (randomPieceShape === "stickShape") {
-      return FallingPiece.stickShape(randomColor, board);
-    } else if (randomPieceShape === "zShapeRight") {
-      return FallingPiece.zShapeRight(randomColor, board);
-    } else if (randomPieceShape === "zShapeLeft") {
-      return FallingPiece.zShapeLeft(randomColor, board);
-    } else if (randomPieceShape === "plugShape") {
-      return FallingPiece.plugShape(randomColor, board);
-    }
-  };
 
   FallingPiece.lShapeRight = function(color, board) {
     var lShapeRight = new FallingPiece(board);
@@ -177,6 +135,36 @@
     plugShape.segments.push(new Block(0 + 1, plugShape.centerCol + 1, color));
 
     return plugShape;
+  };
+
+  FallingPiece.SHAPES = [
+    FallingPiece.lShapeRight,
+    FallingPiece.lShapeLeft,
+    FallingPiece.blockShape,
+    FallingPiece.stickShape,
+    FallingPiece.zShapeRight,
+    FallingPiece.zShapeLeft,
+    FallingPiece.plugShape
+  ];
+
+  FallingPiece.COLORS = [
+    "red",
+    "blue",
+    "yellow",
+    "green",
+    "purple"
+  ];
+
+  FallingPiece.randomPiece = function(board) {
+    var randomColor = FallingPiece.COLORS[
+      Math.floor(Math.random() * FallingPiece.COLORS.length)
+    ]
+
+    var randomPieceShape = FallingPiece.SHAPES[
+      Math.floor(Math.random() * FallingPiece.SHAPES.length)
+    ]
+
+    return randomPieceShape(randomColor, board)
   };
 
   FallingPiece.prototype.move = function(view, board) {
